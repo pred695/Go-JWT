@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 
-	"github.com/pred695/Go-JWT/Models"
+	"github.com/pred695/Go-JWT/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -33,8 +33,8 @@ func Connect(config *Config) (*gorm.DB, error) {
 	}
 
 	fmt.Println("Connection successful")
-	db.AutoMigrate(new(Models.Task)) //creating the table if not exists
-	db.AutoMigrate(new(Models.User)) //creating the table if not exists
+	db.AutoMigrate(new(models.Task)) //creating the table if not exists
+	db.AutoMigrate(new(models.User)) //creating the table if not exists
 	DbConn = db
 	return db, nil
 }

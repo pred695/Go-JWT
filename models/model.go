@@ -1,4 +1,4 @@
-package Models
+package models
 
 import "time"
 
@@ -8,7 +8,7 @@ type (
 		Description string `json:"description"`
 		CreatedAt   string `json:"created_at"`
 		Completed   bool   `json:"completed"`
-		Username    string `json:"username" gorm:"column:username;"`         // Foreign key to User
+		Username    string `json:"username" gorm:"column:username;"`        // Foreign key to User
 		User        User   `gorm:"foreignKey:Username;references:Username"` // Establishing the relationship
 	}
 	User struct {

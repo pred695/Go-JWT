@@ -6,8 +6,8 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
-	"github.com/pred695/Go-JWT/Routes"
 	"github.com/pred695/Go-JWT/database"
+	"github.com/pred695/Go-JWT/routes"
 	"gorm.io/gorm"
 )
 
@@ -36,8 +36,8 @@ func main() {
 		log.Fatal("Error connecting to database")
 	}
 	defer db.Close()
-	Routes.SetUpTaskRoutes(app)
+	routes.SetUpTaskroutes(app)
 
-	Routes.SetUpUserRoutes(app)
+	routes.SetUpUserroutes(app)
 	app.Listen(":3000")
 }
