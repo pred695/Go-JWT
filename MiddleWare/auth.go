@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/pred695/Go-JWT/Utils"
+	"github.com/pred695/Go-JWT/utils"
 )
 
 func VerifyUser(ctx *fiber.Ctx) error {
@@ -22,7 +22,7 @@ func VerifyUser(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusBadRequest).JSON(contextMap)
 	}
 
-	claims, err := Utils.ValidateToken(token)
+	claims, err := utils.ValidateToken(token)
 	fmt.Println(claims)
 	if err != nil {
 		contextMap["statusText"] = "Unauthorized"
@@ -31,5 +31,5 @@ func VerifyUser(ctx *fiber.Ctx) error {
 	}
 
 	ctx.Next()
-	return nil 
+	return nil
 }

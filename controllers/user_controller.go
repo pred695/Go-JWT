@@ -1,13 +1,13 @@
-package Controllers
+package controllers
 
 import (
 	"fmt"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/pred695/Go-JWT/Database"
 	"github.com/pred695/Go-JWT/Models"
-	"github.com/pred695/Go-JWT/Utils"
+	"github.com/pred695/Go-JWT/database"
+	"github.com/pred695/Go-JWT/utils"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -28,7 +28,7 @@ func GetUsers(ctx *fiber.Ctx) error {
 		"message":    "Get Users",
 		"statusText": "Ok",
 	}
-	db := Database.DbConn
+	db := database.DbConn
 	var users []Models.User
 	result := db.Find(&users)
 	if result.Error != nil {
@@ -46,7 +46,7 @@ func LoginUser(ctx *fiber.Ctx) error {
 		"statusText": "Token generated successfully", /*stored in cookie*/
 	}
 
-	db := Database.DbConn
+	db := database.DbConn
 
 	var loginCredentials LoginData
 	if err := ctx.BodyParser(&loginCredentials); err != nil {
@@ -75,7 +75,7 @@ func LoginUser(ctx *fiber.Ctx) error {
 	}
 
 	//create token:
-	token, err := Utils.GenerateToken(&user)
+	token, err := utils.GenerateToken(&user)
 	if err != nil {
 		contextMap["statusText"] = "Internal Server Error"
 		contextMap["message"] = "Error in generating token"
@@ -98,7 +98,7 @@ func RegisterUser(ctx *fiber.Ctx) error {
 		"message":    "Register User",
 		"statusText": "Ok",
 	}
-	db := Database.DbConn
+	db := database.DbConn
 	var signUpCredentials FormData
 	user := new(Models.User)
 	if err := ctx.BodyParser(&signUpCredentials); err != nil {
@@ -107,7 +107,7 @@ func RegisterUser(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusBadRequest).JSON(contextMap)
 	}
 	user.Username = signUpCredentials.Username
-	user.Password = Utils.HashPassword(signUpCredentials.Password)
+	user.Password = utils.HashPassword(signUpCredentials.Password)
 	user.Email = signUpCredentials.Email
 	result := db.Create(&user)
 	if result.Error != nil {

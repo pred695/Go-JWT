@@ -1,21 +1,20 @@
-package Controllers
+package controllers
 
 import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/pred695/Go-JWT/Database"
 	"github.com/pred695/Go-JWT/Models"
-	"github.com/pred695/Go-JWT/Utils"
+	"github.com/pred695/Go-JWT/database"
+	"github.com/pred695/Go-JWT/utils"
 )
-
 
 func ListTasks(ctx *fiber.Ctx) error {
 	contextMap := fiber.Map{
 		"message":    "List of tasks",
 		"statusText": "Ok",
 	}
-	db := Database.DbConn
+	db := database.DbConn
 	var tasks []Models.Task
 
 	tokenString := ctx.Cookies("token")
@@ -26,13 +25,12 @@ func ListTasks(ctx *fiber.Ctx) error {
 	}
 
 	//Validate Token if found:
-	claims, err := Utils.ValidateToken(tokenString)
+	claims, err := utils.ValidateToken(tokenString)
 	if err != nil {
 		contextMap["statusText"] = "Unauthorized"
 		contextMap["message"] = "Invalid Token"
 		return ctx.Status(fiber.StatusUnauthorized).JSON(contextMap)
 	}
-
 
 	result := db.Where("username = ?", claims.Username).Find(&tasks)
 	if result.Error != nil {
@@ -49,7 +47,7 @@ func CreateTask(ctx *fiber.Ctx) error {
 		"message":    "Task created",
 		"statusText": "Ok",
 	}
-	db := Database.DbConn
+	db := database.DbConn
 	task := new(Models.Task)
 
 	if err := ctx.BodyParser(task); err != nil {
@@ -65,7 +63,7 @@ func CreateTask(ctx *fiber.Ctx) error {
 	}
 
 	//Validate Token if found:
-	claims, err := Utils.ValidateToken(tokenString)
+	claims, err := utils.ValidateToken(tokenString)
 	if err != nil {
 		contextMap["statusText"] = "Unauthorized"
 		contextMap["message"] = "Invalid Token"
@@ -98,7 +96,7 @@ func UpdateTask(ctx *fiber.Ctx) error {
 		"message":    "Task updated",
 		"statusText": "Ok",
 	}
-	db := Database.DbConn
+	db := database.DbConn
 	taskId := ctx.Params("id")
 	var task Models.Task
 
@@ -135,7 +133,7 @@ func DeleteTask(ctx *fiber.Ctx) error {
 		"message":    "Task deleted",
 		"statusText": "Ok",
 	}
-	db := Database.DbConn
+	db := database.DbConn
 	taskId := ctx.Params("id")
 	var task Models.Task
 
