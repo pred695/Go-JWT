@@ -6,20 +6,20 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
-	"github.com/pred695/Go-JWT/Database"
 	"github.com/pred695/Go-JWT/Routes"
+	"github.com/pred695/Go-JWT/database"
 	"gorm.io/gorm"
 )
 
 var DbConn *gorm.DB
-var Config Database.Config
+var Config database.Config
 
 func init() {
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	Config = Database.Config{
+	Config = database.Config{
 		Host:     os.Getenv("DB_HOST"),
 		Port:     os.Getenv("DB_PORT"),
 		Password: os.Getenv("DB_PASS"),
@@ -27,7 +27,7 @@ func init() {
 		SSLMode:  os.Getenv("DB_SSLMODE"),
 		DBName:   os.Getenv("DB_NAME"),
 	}
-	DbConn, err = Database.Connect(&Config)
+	DbConn, err = database.Connect(&Config)
 }
 func main() {
 	app := fiber.New()

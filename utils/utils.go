@@ -1,4 +1,4 @@
-package Utils
+package utils
 
 import (
 	"fmt"
@@ -28,7 +28,7 @@ func HashPassword(password string) string {
 	return string(hash)
 }
 
-func GenerateToken(user *Models.User) (string, error){
+func GenerateToken(user *Models.User) (string, error) {
 
 	claims := CustomClaims{
 		user.Username,
@@ -67,7 +67,7 @@ func ValidateToken(tokenString string) (*CustomClaims, error) {
 
 	if !ok {
 		fmt.Println("Error in validating token", err)
-		
+
 		return nil, err
 	}
 
