@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/pred695/Go-JWT/Models"
 	"github.com/pred695/Go-JWT/database"
+	"github.com/pred695/Go-JWT/models"
 	"github.com/pred695/Go-JWT/utils"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -29,7 +29,7 @@ func GetUsers(ctx *fiber.Ctx) error {
 		"statusText": "Ok",
 	}
 	db := database.DbConn
-	var users []Models.User
+	var users []models.User
 	result := db.Find(&users)
 	if result.Error != nil {
 		contextMap["statusText"] = "Internal Server Error"
@@ -54,7 +54,7 @@ func LoginUser(ctx *fiber.Ctx) error {
 		contextMap["message"] = "Ok"
 		return ctx.Status(fiber.StatusBadRequest).JSON(contextMap)
 	}
-	var user Models.User
+	var user models.User
 
 	//search the user in the database according to the given email.
 	db.First(&user, "username = ?", loginCredentials.Username)
@@ -100,7 +100,7 @@ func RegisterUser(ctx *fiber.Ctx) error {
 	}
 	db := database.DbConn
 	var signUpCredentials FormData
-	user := new(Models.User)
+	user := new(models.User)
 	if err := ctx.BodyParser(&signUpCredentials); err != nil {
 		contextMap["statusText"] = "Bad Request"
 		contextMap["message"] = err

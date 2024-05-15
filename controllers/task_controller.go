@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/pred695/Go-JWT/Models"
 	"github.com/pred695/Go-JWT/database"
+	"github.com/pred695/Go-JWT/models"
 	"github.com/pred695/Go-JWT/utils"
 )
 
@@ -15,7 +15,7 @@ func ListTasks(ctx *fiber.Ctx) error {
 		"statusText": "Ok",
 	}
 	db := database.DbConn
-	var tasks []Models.Task
+	var tasks []models.Task
 
 	tokenString := ctx.Cookies("token")
 	if tokenString == "" {
@@ -48,7 +48,7 @@ func CreateTask(ctx *fiber.Ctx) error {
 		"statusText": "Ok",
 	}
 	db := database.DbConn
-	task := new(Models.Task)
+	task := new(models.Task)
 
 	if err := ctx.BodyParser(task); err != nil {
 		contextMap["statusText"] = "Bad Request"
@@ -69,7 +69,7 @@ func CreateTask(ctx *fiber.Ctx) error {
 		contextMap["message"] = "Invalid Token"
 		return ctx.Status(fiber.StatusUnauthorized).JSON(contextMap)
 	}
-	var user Models.User
+	var user models.User
 	findUser := db.Where("username = ?", claims.Username).First(&user)
 	if findUser.Error != nil {
 		contextMap["statusText"] = "Internal Server Error"
@@ -98,7 +98,7 @@ func UpdateTask(ctx *fiber.Ctx) error {
 	}
 	db := database.DbConn
 	taskId := ctx.Params("id")
-	var task Models.Task
+	var task models.Task
 
 	db.First(&task, taskId) //store the task in the task variable
 
@@ -135,7 +135,7 @@ func DeleteTask(ctx *fiber.Ctx) error {
 	}
 	db := database.DbConn
 	taskId := ctx.Params("id")
-	var task Models.Task
+	var task models.Task
 
 	db.First(&task, taskId)
 

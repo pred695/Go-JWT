@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/pred695/Go-JWT/Models"
+	"github.com/pred695/Go-JWT/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -28,7 +28,7 @@ func HashPassword(password string) string {
 	return string(hash)
 }
 
-func GenerateToken(user *Models.User) (string, error) {
+func GenerateToken(user *models.User) (string, error) {
 
 	claims := CustomClaims{
 		user.Username,
